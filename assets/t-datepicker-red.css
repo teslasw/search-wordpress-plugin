@@ -1,0 +1,91 @@
+/*
+* Tuds tDatepicker
+* Copyright 2018 tuds - crazychicken
+* Licensed under: LICENSE
+* Version: v1.0.4
+*/
+.t-check-in,
+.t-check-out {
+  border-color: #ededed; }
+
+.t-check-in {
+  border-right-color: #e8e8e8; }
+
+.t-date-title {
+  color: #dc0202; }
+
+.t-special-day:before {
+  border-color: transparent;
+  border-top-color: #dc0202;
+  border-right-color: #dc0202; }
+
+.t-datepicker-day {
+  border-color: #ededed;
+  background: #fff; }
+
+.t-day, .t-range, .t-start, .t-end, .t-disabled {
+  background: #fafafa;
+  border-color: #fff; }
+
+.t-disabled {
+  background: transparent; }
+
+.t-highlighted {
+  color: #fe6060; }
+  .t-highlighted.t-disabled {
+    background: #fafafa; }
+
+.t-start,
+.t-end,
+.t-end-limit {
+  color: #fff;
+  background: #fd1414; }
+
+.t-range, .t-range-limit {
+  color: #fe6060; }
+
+.t-range {
+  background: #ffe7e7; }
+
+.t-range-limit {
+  background: #ffdede; }
+  .t-range-limit.t-start, .t-range-limit.t-end {
+    color: #fff;
+    background: #fe9292; }
+
+.t-check-in .t-end,
+.t-check-out .t-start,
+.t-check-out tr ~ .t-end {
+  color: #fff;
+  background: #fd1414; }
+
+.t-hover-day, .t-hover-day-content, .t-hover-day:hover {
+  color: #fff;
+  background: #fe6060; }
+
+.t-hover-day::after {
+  border-color: transparent;
+  border-top-color: #fe6060; }
+
+.t-today, .t-today .t-hover-day-content {
+  background: #aeaeae; }
+
+.t-today::after {
+  border-top-color: #aeaeae; }
+
+.t-today:hover, .t-today:hover .t-hover-day-content {
+  background: #fe6060; }
+
+.t-today:hover::after {
+  border-top-color: #fe6060; }
+
+.t-start.t-today,
+.t-end.t-today {
+  color: #fff; }
+  .t-start.t-today, .t-start.t-today .t-hover-day-content,
+  .t-end.t-today,
+  .t-end.t-today .t-hover-day-content {
+    background: #fd1414; }
+  .t-start.t-today::after,
+  .t-end.t-today::after {
+    border-top-color: #fd1414; }
