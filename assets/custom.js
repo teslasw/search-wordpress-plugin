@@ -15,7 +15,7 @@ jQuery(function($){
             minLength: 3,
             delay: 0,
             source: function( request, response ) {
-                let zumataUrl = 'https://wlapi.hotelbookingservices.co/web/autosuggest';//'https://lv2.globaltripper.com/web/autosuggest';
+                let zumataUrl = 'https://wlapi.hotelbookingservices.co/web/autosuggest?locale='+sbcvar.locale;//'https://lv2.globaltripper.com/web/autosuggest';
                 let authToken = 'app_SBCTeb0e53e32d3f76deba91';//'app_TESTeec3307e143e768c1983';
                 $.ajax({
                     url: zumataUrl,
@@ -42,6 +42,8 @@ jQuery(function($){
                 $(this).val( ui.item.term );
                 bookvar.location = ui.item.term;
                 bookvar.regionid = ui.item.data.region_id;
+                $('.destination-error').html('');
+                $('.destination-error').hide();
                 return false;
             }
         }).autocomplete( "instance" )._renderItem = function( ul, item ) {
@@ -50,7 +52,7 @@ jQuery(function($){
               .appendTo( ul );
         };
         $('.t-datepicker').tDatePicker({
-	    iconDate: '<i class="fa fa-calendar" aria-hidden="true"></i>',
+	        iconDate: '<i class="fa fa-calendar" aria-hidden="true"></i>',
             titleCheckIn: sbcvar.checkin,
             titleCheckOut: sbcvar.checkout,
             titleToday: sbcvar.today,
@@ -80,6 +82,9 @@ jQuery(function($){
                 sbcvar.december
             ],
             formatDate: 'yyyy-mm-dd'
+        }).bind('click',function(){
+            $('.datepicker-error').html('');
+            $('.datepicker-error').hide();
         });
         $('#option-guest').popover({
             html : true,
@@ -237,25 +242,47 @@ jQuery(function($){
                 $('[data-toggle="popover"]').popover('hide');
             }
         });
-        $('#travelDetailsForm').submit((e) => {
-            let params = {
-                locationQuery : bookvar.location,
-                regionId : bookvar.regionid,
-                checkInDate : $('[name="t-start"]').val() ,
-                checkOutDate : $('[name="t-end"]').val(),
-                roomCount : bookvar.room,
-                adultCount : bookvar.adult,
-                currency : 'AUD',
-                searchId : bookvar.searchid,
-            };
-            if(bookvar.child.length>0)
-                params.children = bookvar.child.join(',');
-            console.log("Params: %o", params);
-            let zumataFullUrl = zumataRedirectBaseUrl+encodeURIComponent(jQuery('#destination').val())+'?'+jQuery.param(params);
-            console.log("Full Submit Url: %s", zumataFullUrl);
-            // window.location.assign(zumataFullUrl);
-            window.open(zumataFullUrl, '_blank');
-            e.preventDefault();
+        $('#travelDetailsForm').submit(function(e) {
+            var haserror = false;
+            if(bookvar.location.length<=0 || bookvar.location!=$('#destination').val()){
+                $('.destination-error').html(sbcvar.error_location);
+                $('.destination-error').show();
+                haserror = true;
+            }
+            if($('[name="t-start"]').val()=="null"||$('[name="t-start"]').val().length<=0){
+                $('.datepicker-error').html(sbcvar.error_checkin);
+                $('.datepicker-error').show();
+                haserror = true;
+            }
+            else if($('[name="t-end"]').val()=="null"||$('[name="t-end"]').val().length<=0){
+                $('.datepicker-error').html(sbcvar.error_checkout);
+                $('.datepicker-error').show();
+                haserror = true;
+            }
+
+            if(!haserror){
+                let params = {
+                    locationQuery : bookvar.location,
+                    regionId : bookvar.regionid,
+                    checkInDate : $('[name="t-start"]').val() ,
+                    checkOutDate : $('[name="t-end"]').val(),
+                    roomCount : bookvar.room,
+                    adultCount : bookvar.adult,
+                    currency : 'AUD',
+                    searchId : bookvar.searchid,
+                };
+                if(bookvar.child.length>0)
+                    params.children = bookvar.child.join(',');
+                console.log("Params: %o", params);
+                let zumataFullUrl = zumataRedirectBaseUrl+encodeURIComponent(jQuery('#destination').val())+'?'+jQuery.param(params);
+                console.log("Full Submit Url: %s", zumataFullUrl);
+                // window.location.assign(zumataFullUrl);
+                window.open(zumataFullUrl, '_blank');
+                e.preventDefault();
+            }
+            else{
+                return false;
+            }
         });
 
         function childOptChange(obj){

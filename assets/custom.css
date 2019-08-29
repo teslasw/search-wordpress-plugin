@@ -29,9 +29,6 @@
 #travelDetailsForm {padding:0; border-radius:10px; bottom:-85px;}
 }
 
-
-
-
 .t-check-in,.t-check-out {border:transparent none;}
 
 #travelDetailsForm .bootstrap.form-group{margin-bottom:0;}
@@ -196,4 +193,10 @@ overflow:hidden;
 
 .t-table-wrap {font-size:12px; font-family:'roboto';font-weight:400;}
 
-
+#travelDetailsForm .has-error {
+	color: red;
+    font-size: 10px;
+    position: absolute;
+    bottom: -32px;
+	letter-spacing: 0.1em;
+}

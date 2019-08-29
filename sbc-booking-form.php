@@ -19,6 +19,7 @@ function sbcbookingform_code(){
                 <div class="input-group bootstrap">
                    <i class="booking-icon fa fa-map-marker"></i> <input id="destination" type="text" class="form-control basicAutocomplete" autocomplete="off" placeholder="'.__('Destination', 'sbcbooking').'">
                 </div>
+                <div class="destination-error has-error" style="display:none"></div>
             </div>
             <div class="form-group bootstrap col-xl-4 col-lg-12">
                 <div class="input-group bootstrap">
@@ -27,6 +28,7 @@ function sbcbookingform_code(){
                         <div class="t-check-out"></div>
                     </div>
                 </div>
+                <div class="datepicker-error has-error" style="display:none"></div>
             </div>
             <div class="form-group bootstrap last col-xl-3 col-lg-12">
                 <div class="input-group bootstrap">
@@ -50,7 +52,7 @@ add_shortcode( 'sbcbookingform', 'sbcbookingform_code' );
 
 function sbcbookingform_scripts()
 {
-    $build = '1.04';
+    $build = '1.05';
     wp_enqueue_style( 'multidatespicker', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.multidatespicker.css' );
     wp_enqueue_style( 'jquery-ui', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.min.css' );
     // wp_enqueue_style( 'bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' );
@@ -65,6 +67,11 @@ function sbcbookingform_scripts()
     wp_enqueue_script( 'bootstrap-js', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', array('jquery'));
     wp_enqueue_script( 't-datepicker', plugins_url( '/', __FILE__ ) . 'assets/t-datepicker.min.js', array('jquery'));
     wp_register_script( 'sbcbooking', plugins_url( '/', __FILE__ ) . 'assets/custom.js?b='.$build, array('jquery'));
+    $locale = apply_filters( 'wpml_current_language', NULL );
+    if($locale=="zh-hans")
+        $locale = "zh-cn";
+    elseif($locale=="en")
+        $locale = "en-us";
     wp_localize_script( 'sbcbooking', 'sbcvar', array(
         'adults' => __( 'Adults', 'sbcbooking' ),
         'children' => __( 'Children', 'sbcbooking' ),
@@ -94,7 +101,11 @@ function sbcbookingform_scripts()
         'septemper' => __( 'Septemper', 'sbcbooking' ),
         'october' => __( 'October', 'sbcbooking' ),
         'november' => __( 'November', 'sbcbooking' ),
-        'december' => __( 'December', 'sbcbooking' )
+        'december' => __( 'December', 'sbcbooking' ),
+        'locale' => $locale,
+        'error_location' => __( 'Please select destination from list', 'sbcbooking' ),
+        'error_checkin' => __( 'Check In date is required', 'sbcbooking' ),
+        'error_checkout' => __( 'Check Out date is required', 'sbcbooking' ),
     ));
     wp_enqueue_script( 'sbcbooking' );
     
