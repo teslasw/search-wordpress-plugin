@@ -194,7 +194,7 @@ overflow:hidden;
 .t-table-wrap {font-size:12px; font-family:'roboto';font-weight:400;}
 
 #travelDetailsForm .has-error {
-	color: red;
+	color: #f70000;
     font-size: 10px;
     position: absolute;
     bottom: -20px;
