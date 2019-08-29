@@ -249,7 +249,7 @@ jQuery(function($){
                 $('.destination-error').show();
                 haserror = true;
             }
-            if($('[name="t-start"]').val()=="null"||$('[name="t-start"]').val().length<=0){
+            else if($('[name="t-start"]').val()=="null"||$('[name="t-start"]').val().length<=0){
                 $('.datepicker-error').html(sbcvar.error_checkin);
                 $('.datepicker-error').show();
                 haserror = true;
