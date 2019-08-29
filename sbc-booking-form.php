@@ -61,8 +61,8 @@ function sbcbookingform_scripts()
     // wp_enqueue_style( 't-datepicker-lime', plugins_url( '/', __FILE__ ) . 'assets/t-datepicker-lime.css' );
     wp_enqueue_style( 't-datepicker-red', plugins_url( '/', __FILE__ ) . 'assets/t-datepicker-red.css' );
     wp_enqueue_style( 'sbcbooking', plugins_url( '/', __FILE__ ) . 'assets/custom.css?b='.$build );
-    if(file_exists(plugins_url( '/', __FILE__ ) . 'assets/custom-overide.css')){
-        wp_enqueue_style( 'sbcbooking-overide', plugins_url( '/', __FILE__ ) . 'assets/custom-overide.js?b='.$build );
+    if(file_exists(plugin_dir_path( __FILE__ ) . 'assets/custom-overide.css')){
+        wp_enqueue_style( 'sbcbooking-overide', plugins_url( '/', __FILE__ ) . 'assets/custom-overide.css?b='.$build );
     }
 
     wp_enqueue_script( 'jquery-ui', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.min.js', array('jquery'));
