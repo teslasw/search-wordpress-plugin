@@ -52,7 +52,7 @@ add_shortcode( 'sbcbookingform', 'sbcbookingform_code' );
 
 function sbcbookingform_scripts()
 {
-    $build = '1.05';
+    $build = '1.06';
     wp_enqueue_style( 'multidatespicker', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.multidatespicker.css' );
     wp_enqueue_style( 'jquery-ui', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.min.css' );
     // wp_enqueue_style( 'bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' );
