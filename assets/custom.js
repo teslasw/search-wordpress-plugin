@@ -12,7 +12,7 @@ jQuery(function($){
             $(this).attr('placeholder',desplholder);
         });
         $('#destination').autocomplete({      
-            minLength: 3,
+            minLength: 1,
             delay: 0,
             source: function( request, response ) {
                 let zumataUrl = 'https://wlapi.hotelbookingservices.co/web/autosuggest?locale='+sbcvar.locale;//'https://lv2.globaltripper.com/web/autosuggest';
