@@ -268,7 +268,7 @@ jQuery(function($){
                     checkOutDate : $('[name="t-end"]').val(),
                     roomCount : bookvar.room,
                     adultCount : bookvar.adult,
-                    currency : 'AUD',
+                    currency : 'USD',
                     searchId : bookvar.searchid,
                 };
                 if(bookvar.child.length>0)
