@@ -13,11 +13,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function sbcbookingform_code(){
-    return '<form id="travelDetailsForm" method="get">
+    $cconnect_api_key = '341FF761-D4D8-4D7E-86A7-A51C9CFA1EEA';
+    $login_cconnect = 'http://appserver.uat.ipo-servers.net:5500/auth/login';
+    $locale = apply_filters( 'wpml_current_language', NULL );
+    if($locale=="zh-hans")
+        $locale = "zh-cn";
+    elseif($locale=="en")
+        $locale = "en-us";
+    return '<div id="sbc-login-form">
+        <button type="button" class="btn btn-primary bootstrap" onclick="location.href=\''."{$login_cconnect}/{$cconnect_api_key}?language=$locale".'\'">'.__('Login to Search', 'sbcbooking').'<i class="fa fa-angle-right"></i></button>
+        <button type="button" class="btn btn-primary bootstrap">'.__('Register', 'sbcbooking').'<i class="fa fa-angle-right"></i></button>
+    </div>
+    <form id="travelDetailsForm" method="get" style="display:none">
         <div class="bootstrap row">
             <div class="form-group bootstrap col-xl-3 col-lg-12">
                 <div class="input-group bootstrap">
-                   <i class="booking-icon fa fa-map-marker"></i> <input id="destination" type="text" class="form-control basicAutocomplete" autocomplete="off" placeholder="'.__('Destination', 'sbcbooking').'">
+                <i class="booking-icon fa fa-map-marker"></i> <input id="destination" type="text" class="form-control basicAutocomplete" autocomplete="off" placeholder="'.__('Destination', 'sbcbooking').'">
                 </div>
                 <div class="destination-error has-error" style="display:none"></div>
             </div>
@@ -32,7 +43,7 @@ function sbcbookingform_code(){
             </div>
             <div class="form-group bootstrap last col-xl-3 col-lg-12">
                 <div class="input-group bootstrap">
-                   <i class="booking-icon fa fa-users"></i> <input type="button" id="option-guest" data-toggle="popover" value="2 '.__('Adults', 'sbcbooking').' · 0 '.__('Children', 'sbcbooking').' · 1 '.__('Room', 'sbcbooking').'"/>
+                <i class="booking-icon fa fa-users"></i> <input type="button" id="option-guest" data-toggle="popover" value="2 '.__('Adults', 'sbcbooking').' · 0 '.__('Children', 'sbcbooking').' · 1 '.__('Room', 'sbcbooking').'"/>
                 </div>
             </div>
             <div class="form-group bootstrap  last col-xl-2 col-lg-12">
@@ -52,7 +63,7 @@ add_shortcode( 'sbcbookingform', 'sbcbookingform_code' );
 
 function sbcbookingform_scripts()
 {
-    $build = '1.07';
+    $build = '1.10'.time();
     wp_enqueue_style( 'multidatespicker', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.multidatespicker.css' );
     wp_enqueue_style( 'jquery-ui', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.min.css' );
     // wp_enqueue_style( 'bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' );
@@ -109,9 +120,70 @@ function sbcbookingform_scripts()
         'error_location' => __( 'Please select destination from list', 'sbcbooking' ),
         'error_checkin' => __( 'Check In date is required', 'sbcbooking' ),
         'error_checkout' => __( 'Check Out date is required', 'sbcbooking' ),
+        'stay_login' => __('Do you want to stay login next time?','sbcbooking'),
+        'is_login' => isset($_COOKIE['payment_login'])&&!empty($_COOKIE['payment_login'])?true:false,
+        'search' => __('Search','sbcbooking'),
+        'login' => __('Login','sbcbooking'),
     ));
     wp_enqueue_script( 'sbcbooking' );
     
 }
-
 add_action( 'wp_enqueue_scripts', 'sbcbookingform_scripts' );
+
+function sbcbookingform_init(){
+    // header('Access-Control-Allow-Credentials: true');
+    // header('Access-Control-Allow-Origin: http://appserver.uat.ipo-servers.net');
+
+    // $args = json_decode(file_get_contents('php://input'),true);
+    // if(isset($args['email'])) {
+    //     // setcookie('email', $args['email'], time()+365*24*60*60, '/', '/');
+    //     $_SESSION['email'] = $args['email'];
+    //     if(isset($_SESSION['email']))
+    //         die('OK '.$_SESSION['email']);
+    //     else
+    //         die('NOK '.$args['email']);
+    //     //echo '<script> if(confirm("'.__('Do you want to stay login next time?').'")) {   }</script>';
+    // }
+    // elseif(isset($args['show_cookie'])){
+    //     if(isset($_SESSION['email']))
+    //         die('OK '.$_SESSION['email']);
+    //     else
+    //         die('NOK');
+    // }
+    // if(isset($_GET['email'])){
+    //     if(setcookie('email',urldecode($_GET['email']),time()+365*24*60*60)){
+    //         if (!session_id()) {
+    //             session_start();
+    //         }
+    //         // $_SESSION['prompt_set'] = true;
+    //         setcookie('prompt_set',true,time()+24*60*60);
+    //         header('Location: '.site_url());
+    //         // echo '<html>
+    //         // <body>
+    //         // </body>
+    //         // <script>
+    //         //     var xmlHttp = new XMLHttpRequest();
+    //         //     xmlHttp.open("POST", "http://easilytravel.txrouter.noi.dev.ipo-servers.net/app_dev.php/set_cconnect_login", true);
+    //         //     xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    //         //     xmlHttp.onreadystatechange = function() { // Call a function when the state changes.
+    //         //         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+    //         //             window.location.replace("'.site_url().'");
+    //         //         }
+    //         //     }
+    //         //     xmlHttp.send(null);
+    //         // </script>
+    //         // </html>';
+    //         exit;
+    //     }
+    // }
+    // if(isset($_GET['SameSiteCookie'])){
+    //     $ch = curl_init();
+    //     curl_setopt($ch, CURLOPT_URL, "http://appserver.uat.ipo-servers.net:5500/api/email");
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    //     $output = curl_exec($ch);
+    //     curl_close($ch);      
+    //     print_r($output);
+    //     exit;
+    // }
+}
+add_action( 'init', 'sbcbookingform_init' );

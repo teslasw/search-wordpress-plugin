@@ -1,4 +1,5 @@
 jQuery(function($){
+    let isLogin = false;
     let zumataRedirectBaseUrl = 'https://travel.dreamholidays.io/search/';//'https://staging-lv.globaltripper.com/search/';
     let bookvar = {searchid:'',location:'',regionid:'',adult:'2',child:[],room:'1'};
     let childvar = [];
@@ -243,6 +244,10 @@ jQuery(function($){
             }
         });
         $('#travelDetailsForm').submit(function(e) {
+            if(true){
+                location.href = 'http://txrouter.noi.dev.ipo-servers.net/app_dev.php/testMerchant/EasilyTravel/easy/easilytravel';
+                return false;
+            }
             var haserror = false;
             if(bookvar.location.length<=0 || bookvar.location!=$('#destination').val()){
                 $('.destination-error').html(sbcvar.error_location);
@@ -288,5 +293,56 @@ jQuery(function($){
         function childOptChange(obj){
             console.log('change',obj);
         }
+
+        // $.ajax({
+        //     url:'http://appserver.uat.ipo-servers.net:5500/api/email',
+        //     xhrFields: {
+        //        withCredentials: true
+        //     },
+        //     async: true,
+        //     // dataType: 'jsonp',
+        //     crossDomain: true,
+        //     done: function(result){
+        //         console.log('result',result);
+        //     }
+        // });
+        if(sbcvar.is_login==false){
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    result = JSON.parse(xhr.response);
+                    console.log('result',xhr.response);
+                    if(result.status=="ok"){
+                        isLogin = true;
+                        $('#sbc-login-form').css('display','none');
+                        $('#travelDetailsForm').css('display','block');
+                        if(confirm(`${sbcvar.stay_login}`))
+                            staylogin(result.payment_login);
+                    }
+                    else{
+                    }
+                }
+                else{
+                    console.log('error',xhr.response);
+                }
+            }
+            xhr.open('GET', 'http://appserver.uat.ipo-servers.net:5500/api/email', true);
+            xhr.withCredentials = true;
+            xhr.send('');
+        }
+        else{
+            isLogin = true;
+            $('#sbc-login-form').css('display','none');
+            $('#travelDetailsForm').css('display','block');
+        }
     });
+
+    function staylogin(email){
+        console.log('adding email into cookie',email);
+        var date = new Date();
+        date.setDate(date.getDate() + 365);
+        var dateString = date.toGMTString();
+        var cookieString = 'payment_login='+email+';path=/;' + dateString;
+        document.cookie = cookieString;
+    }
 });
