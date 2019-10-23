@@ -244,10 +244,6 @@ jQuery(function($){
             }
         });
         $('#travelDetailsForm').submit(function(e) {
-            if(true){
-                location.href = 'http://txrouter.noi.dev.ipo-servers.net/app_dev.php/testMerchant/EasilyTravel/easy/easilytravel';
-                return false;
-            }
             var haserror = false;
             if(bookvar.location.length<=0 || bookvar.location!=$('#destination').val()){
                 $('.destination-error').html(sbcvar.error_location);
