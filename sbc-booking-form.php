@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function sbcbookingform_code(){
     $cconnect_api_key = '341FF761-D4D8-4D7E-86A7-A51C9CFA1EEA';
-    $login_cconnect = 'http://auth.easilytravel.io/auth/login';
+    $login_cconnect = 'https://auth.easilytravel.io/auth/login';
     $locale = apply_filters( 'wpml_current_language', NULL );
     if($locale=="zh-hans")
         $locale = "zh-cn";
