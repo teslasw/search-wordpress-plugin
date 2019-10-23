@@ -322,7 +322,7 @@ jQuery(function($){
                     console.log('error',xhr.response);
                 }
             }
-            xhr.open('GET', 'http://appserver.uat.ipo-servers.net:5500/api/email', true);
+            xhr.open('GET', 'http://auth.easilytravel.io/api/email', true);
             xhr.withCredentials = true;
             xhr.send('');
         }
