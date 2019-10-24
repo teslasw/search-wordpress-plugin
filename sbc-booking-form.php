@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function sbcbookingform_code(){
     $cconnect_api_key = '341FF761-D4D8-4D7E-86A7-A51C9CFA1EEA';
     $login_cconnect = 'https://auth.easilytravel.io/auth/login';
+    $register_cconnect = 'https://cconnect-web.cloudfintech.io/Account/Link';
     $locale = apply_filters( 'wpml_current_language', NULL );
     if($locale=="zh-hans")
         $locale = "zh-cn";
@@ -22,7 +23,7 @@ function sbcbookingform_code(){
         $locale = "en-us";
     return '<div id="sbc-login-form">
         <button type="button" class="btn btn-primary bootstrap" onclick="location.href=\''."{$login_cconnect}/{$cconnect_api_key}?language=$locale".'\'">'.__('Login to Search', 'sbcbooking').'<i class="fa fa-angle-right"></i></button>
-        <button type="button" class="btn btn-primary bootstrap">'.__('Register', 'sbcbooking').'<i class="fa fa-angle-right"></i></button>
+        <button type="button" class="btn btn-primary bootstrap" onclick="location.href=\''."{$register_cconnect}?appGUID={$cconnect_api_key}&language=$locale".'\'">'.__('Register', 'sbcbooking').'<i class="fa fa-angle-right"></i></button>
     </div>
     <form id="travelDetailsForm" method="get" style="display:none">
         <div class="bootstrap row">
