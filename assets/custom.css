@@ -239,7 +239,7 @@ overflow:hidden;
  li.sbc-logout-button {
 	 padding-top: 18px;
  }
- li.sbc-logout-button button{
+ #sbclogout{
 	background: #b3ce2b;
 	border: #b3ce2b;
 	color: #fff;
