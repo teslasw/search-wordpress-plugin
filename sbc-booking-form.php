@@ -69,7 +69,7 @@ add_shortcode( 'sbcbookingform', 'sbcbookingform_code' );
 function sbcbookingform_scripts()
 {
     global $sbcconfig;
-    $build = '1.10m';
+    $build = '1.10n';
     wp_enqueue_style( 'multidatespicker', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.multidatespicker.css' );
     wp_enqueue_style( 'jquery-ui', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.min.css' );
     // wp_enqueue_style( 'bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' );
@@ -141,7 +141,7 @@ function sbc_loginout_menu( $items, $args ) {
     if( $args->theme_location == 'main_menu'){
         $items .=  '<li class="sbc-logout-button" style="display:none;">
             <span class="text-wrap"><small>Available Points: <b class="sbc-point">0</b></small></span>
-            <button id="sbclogout" class="btn btn-primary bootstrap">Log out</button>
+            <button id="sbclogout" class="btn bootstrap">Log out</button>
         </li>';
     }
     return $items;
