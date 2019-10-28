@@ -238,7 +238,9 @@ overflow:hidden;
  #sbc-login-form button {padding:10px 30px; font-size:16px; margin:10px; border-radius:40px;}
  li.sbc-logout-button {
 	 padding-top: 18px;
-	 background: #b3ce2b;
-	 border: #b3ce2b;
-	 color: #fff;
+ }
+ li.sbc-logout-button button{
+	background: #b3ce2b;
+	border: #b3ce2b;
+	color: #fff;
  }
