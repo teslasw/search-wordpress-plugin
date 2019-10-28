@@ -289,56 +289,72 @@ jQuery(function($){
         function childOptChange(obj){
             console.log('change',obj);
         }
-
-        // $.ajax({
-        //     url:'http://appserver.uat.ipo-servers.net:5500/api/email',
-        //     xhrFields: {
-        //        withCredentials: true
-        //     },
-        //     async: true,
-        //     // dataType: 'jsonp',
-        //     crossDomain: true,
-        //     done: function(result){
-        //         console.log('result',result);
-        //     }
-        // });
         if(sbcvar.is_login==false){
-            var xhr = new XMLHttpRequest();
-            xhr.onload = function() {
-                if (xhr.status == 200) {
-                    result = JSON.parse(xhr.response);
-                    console.log('result',xhr.response);
-                    if(result.status=="ok"){
-                        isLogin = true;
-                        $('#sbc-login-form').css('display','none');
-                        $('#travelDetailsForm').css('display','block');
-                        if(confirm(`${sbcvar.stay_login}`))
-                            staylogin(result.payment_login);
-                    }
-                    else{
+            request(sbcvar.proxy_url+'api/email',function(result){
+                if(result.status=="ok"){
+                    isLogin = true;
+                    $('#sbc-login-form').css('display','none');
+                    $('#travelDetailsForm').css('display','block');
+                    if(confirm(`${sbcvar.stay_login}`)){
+                        getPoint();
+                        $('li.sbc-logout-button').css('display','block');
+                        staylogin(result.payment_login);
                     }
                 }
-                else{
-                    console.log('error',xhr.response);
-                }
-            }
-            xhr.open('GET', 'https://auth.easilytravel.io/api/email', true);
-            xhr.withCredentials = true;
-            xhr.send('');
+            });
         }
         else{
             isLogin = true;
             $('#sbc-login-form').css('display','none');
             $('#travelDetailsForm').css('display','block');
+            $('li.sbc-logout-button').css('display','block');
+            getPoint();
         }
+        $('#sbclogout').on('click',function(){
+            if(confirm('Are you sure?')){
+                request(sbcvar.proxy_url+'api/logout',function(result){
+                    if(result.status=="ok"){
+                        $('#sbc-login-form').css('display','block');
+                        $('#travelDetailsForm').css('display','none');
+                        $('li.sbc-logout-button').css('display','none');
+
+                        document.cookie = "payment_login=;path=/;expires= Thu, 21 Aug 2014 20:00:00 UTC";
+                    }
+                });
+            }
+        })
     });
 
+    function getPoint(){
+        request(sbcvar.proxy_url+'api/point',function(pointResult){
+            if(pointResult.status=="ok")
+                $('b.sbc-point').html(pointResult.data);
+        })
+    }
+
     function staylogin(email){
-        console.log('adding email into cookie',email);
         var date = new Date();
         date.setDate(date.getDate() + 365);
         var dateString = date.toGMTString();
         var cookieString = 'payment_login='+email+';path=/;' + dateString;
         document.cookie = cookieString;
+    }
+
+    function request(url, callback, method = 'GET'){
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+            if (xhr.status == 200) {
+                if(typeof(callback)=='function'){
+                    result = JSON.parse(xhr.response);
+                    callback(result)
+                }
+            }
+            else{
+                console.log('error',xhr.response);
+            }
+        }
+        xhr.open(method, url, true);
+        xhr.withCredentials = true;
+        xhr.send('');
     }
 });
