@@ -297,7 +297,7 @@ jQuery(function($){
                     $('#travelDetailsForm').css('display','block');
                     if(confirm(`${sbcvar.stay_login}`)){
                         getPoint();
-                        $('li.sbc-logout-button').css('display','block');
+                        $('li.sbc-logout-button').css('display','inline-block');
                         staylogin(result.payment_login);
                     }
                 }
@@ -307,7 +307,7 @@ jQuery(function($){
             isLogin = true;
             $('#sbc-login-form').css('display','none');
             $('#travelDetailsForm').css('display','block');
-            $('li.sbc-logout-button').css('display','block');
+            $('li.sbc-logout-button').css('display','inline-block');
             getPoint();
         }
         $('#sbclogout').on('click',function(){
