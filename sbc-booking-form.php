@@ -140,8 +140,8 @@ add_action( 'wp_enqueue_scripts', 'sbcbookingform_scripts' );
 function sbc_loginout_menu( $items, $args ) {
     if( $args->theme_location == 'main_menu'){
         $items .=  '<li class="sbc-logout-button" style="display:none;">
-            <span class="text-wrap"><small>Available Points: <b class="sbc-point">0</b></small></span>
-            <button id="sbclogout" class="btn bootstrap">Log out</button>
+            <span class="text-wrap"><small>'.__('Available Points', 'sbcbooking').': <b class="sbc-point">0</b></small></span>
+            <button id="sbclogout" class="btn bootstrap">'.__('Log out', 'sbcbooking').'</button>
         </li>';
     }
     return $items;
