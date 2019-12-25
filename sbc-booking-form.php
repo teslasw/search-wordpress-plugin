@@ -26,7 +26,7 @@ function sbcbookingform_code(){
     elseif($locale=="en")
         $locale = "en-us";
     return '<div id="sbc-login-form">
-        <button type="button" class="btn btn-primary bootstrap" onclick="location.href=\''."{$login_cconnect}/{$cconnect_api_key}?language=$locale".'\'">'.__('Login to Search', 'sbcbooking').'<i class="fa fa-angle-right"></i></button>
+        <button type="button" class="btn btn-primary bootstrap" onclick="location.href=\''."{$login_cconnect}/{$cconnect_api_key}?language={$locale}&site_id={$sbcconfig['site_id']}".'\'">'.__('Login to Search', 'sbcbooking').'<i class="fa fa-angle-right"></i></button>
         <button type="button" class="btn btn-primary bootstrap" onclick="location.href=\''."{$register_cconnect}?appGUID={$cconnect_api_key}&language=$locale".'\'">'.__('Register', 'sbcbooking').'<i class="fa fa-angle-right"></i></button>
     </div>
     <form id="travelDetailsForm" method="get" style="display:none">
@@ -69,7 +69,7 @@ add_shortcode( 'sbcbookingform', 'sbcbookingform_code' );
 function sbcbookingform_scripts()
 {
     global $sbcconfig;
-    $build = '1.11';
+    $build = '1.11c';
     wp_enqueue_style( 'multidatespicker', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.multidatespicker.css' );
     wp_enqueue_style( 'jquery-ui', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.min.css' );
     // wp_enqueue_style( 'bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' );
@@ -131,6 +131,10 @@ function sbcbookingform_scripts()
         'search' => __('Search','sbcbooking'),
         'login' => __('Login','sbcbooking'),
         'proxy_url' => $sbcconfig['proxy_url'],
+        'site_id' => $sbcconfig['site_id'],
+        'zumata_redirect_url' => $sbcconfig['zumata_redirect_url'],
+        'zumata_api_url' => $sbcconfig['zumata_api_url'],
+        'zumata_api_token' => $sbcconfig['zumata_api_token'],
     ));
     wp_enqueue_script( 'sbcbooking' );
     

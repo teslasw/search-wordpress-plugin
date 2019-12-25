@@ -1,6 +1,6 @@
 jQuery(function($){
     let isLogin = false;
-    let zumataRedirectBaseUrl = 'https://travel.dreamholidays.io/search/';//'https://staging-lv.globaltripper.com/search/';
+    let zumataRedirectBaseUrl = sbcvar.zumata_redirect_url;
     let bookvar = {searchid:'',location:'',regionid:'',adult:'2',child:[],room:'1'};
     let childvar = [];
     let desplholder = '';
@@ -16,8 +16,8 @@ jQuery(function($){
             minLength: 1,
             delay: 0,
             source: function( request, response ) {
-                let zumataUrl = 'https://wlapi.hotelbookingservices.co/web/autosuggest?locale='+sbcvar.locale;//'https://lv2.globaltripper.com/web/autosuggest';
-                let authToken = 'app_SBCTeb0e53e32d3f76deba91';//'app_TESTeec3307e143e768c1983';
+                let zumataUrl = sbcvar.zumata_api_url+'?locale='+sbcvar.locale;
+                let authToken = sbcvar.zumata_api_token;
                 $.ajax({
                     url: zumataUrl,
                     headers : {
@@ -262,24 +262,36 @@ jQuery(function($){
             }
 
             if(!haserror){
-                let params = {
-                    locationQuery : bookvar.location,
-                    regionId : bookvar.regionid,
-                    checkInDate : $('[name="t-start"]').val() ,
-                    checkOutDate : $('[name="t-end"]').val(),
-                    roomCount : bookvar.room,
-                    adultCount : bookvar.adult,
-                    currency : 'USD',
-                    searchId : bookvar.searchid,
-                };
-                if(bookvar.child.length>0)
-                    params.children = bookvar.child.join(',');
-                console.log("Params: %o", params);
-                let zumataFullUrl = zumataRedirectBaseUrl+encodeURIComponent(jQuery('#destination').val())+'?'+jQuery.param(params);
-                console.log("Full Submit Url: %s", zumataFullUrl);
-                // window.location.assign(zumataFullUrl);
-                window.open(zumataFullUrl, '_blank');
-                e.preventDefault();
+                request(sbcvar.proxy_url+'api/session?site_id='+sbcvar.site_id,function(result){
+                    if(result.status=="ok"&&result.session!=undefined){
+                        let locale = sbcvar.locale.split('-');
+                        let params = {
+                            locationQuery : bookvar.location,
+                            regionId : bookvar.regionid,
+                            checkInDate : $('[name="t-start"]').val() ,
+                            checkOutDate : $('[name="t-end"]').val(),
+                            roomCount : bookvar.room,
+                            adultCount : bookvar.adult,
+                            currency : 'USD',
+                            searchId : bookvar.searchid,
+                            locale : locale[0]+'-'+locale[1].toUpperCase(),
+                            addInfo : encodeURI(window.btoa(JSON.stringify({
+                                locale : sbcvar.locale,
+                                session : result.session,
+                                email: getCook('payment_login')
+                            })))
+                        };
+                        if(bookvar.child.length>0)
+                            params.children = bookvar.child.join(',');
+                        console.log("Params: %o", params);
+                        let zumataFullUrl = zumataRedirectBaseUrl+encodeURIComponent(jQuery('#destination').val())+'?'+jQuery.param(params);
+                        console.log("Full Submit Url: %s", zumataFullUrl);
+                        // window.location.assign(zumataFullUrl);
+                        window.open(zumataFullUrl, '_blank');
+                        e.preventDefault();
+                    }
+                });
+                return false;
             }
             else{
                 return false;
@@ -290,7 +302,7 @@ jQuery(function($){
             console.log('change',obj);
         }
         if(sbcvar.is_login==false){
-            request(sbcvar.proxy_url+'api/email',function(result){
+            request(sbcvar.proxy_url+'api/email?site_id='+sbcvar.site_id,function(result){
                 if(result.status=="ok"){
                     isLogin = true;
                     $('#sbc-login-form').css('display','none');
@@ -312,7 +324,7 @@ jQuery(function($){
         }
         $('#sbclogout').on('click',function(){
             if(confirm('Are you sure?')){
-                request(sbcvar.proxy_url+'api/logout',function(result){
+                request(sbcvar.proxy_url+'api/logout?site_id='+sbcvar.site_id,function(result){
                     if(result.status=="ok"){
                         $('#sbc-login-form').css('display','block');
                         $('#travelDetailsForm').css('display','none');
@@ -325,10 +337,16 @@ jQuery(function($){
         })
     });
 
+    function getCook(cookiename) 
+    {
+        var cookiestring=RegExp(""+cookiename+"[^;]+").exec(document.cookie);
+        return decodeURIComponent(!!cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
+    }
+
     function getPoint(){
-        request(sbcvar.proxy_url+'api/point',function(pointResult){
+        request(sbcvar.proxy_url+'api/point?site_id='+sbcvar.site_id,function(pointResult){
             if(pointResult.status=="ok")
-                $('b.sbc-point').html(pointResult.data);
+                $('b.sbc-point, b.sidr-class-sbc-point').html(pointResult.data);
         })
     }
 
@@ -340,7 +358,7 @@ jQuery(function($){
         document.cookie = cookieString;
     }
 
-    function request(url, callback, method = 'GET'){
+    function request(url, callback, body = '', method = 'GET'){
         var xhr = new XMLHttpRequest();
         xhr.onload = function() {
             if (xhr.status == 200) {
@@ -355,6 +373,6 @@ jQuery(function($){
         }
         xhr.open(method, url, true);
         xhr.withCredentials = true;
-        xhr.send('');
+        xhr.send(body);
     }
 });
