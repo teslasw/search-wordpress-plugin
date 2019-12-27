@@ -322,7 +322,7 @@ jQuery(function($){
             $('li.sbc-logout-button').css('display','inline-block');
             getPoint();
         }
-        $('#sbclogout').on('click',function(){
+        $('#sbclogout, #sidr-id-sbclogout').on('click',function(){
             if(confirm('Are you sure?')){
                 request(sbcvar.proxy_url+'api/logout?site_id='+sbcvar.site_id,function(result){
                     if(result.status=="ok"){
@@ -345,8 +345,10 @@ jQuery(function($){
 
     function getPoint(){
         request(sbcvar.proxy_url+'api/point?site_id='+sbcvar.site_id,function(pointResult){
-            if(pointResult.status=="ok")
+            console.log('pointResult',pointResult);
+            if(pointResult.status=="ok"){
                 $('b.sbc-point, b.sidr-class-sbc-point').html(pointResult.data);
+            }
         })
     }
 
