@@ -309,33 +309,39 @@ jQuery(function($){
                     $('#travelDetailsForm').css('display','block');
                     if(confirm(`${sbcvar.stay_login}`)){
                         getPoint();
-                        $('li.sbc-logout-button').css('display','inline-block');
+                        $('li.sbc-logout-button, li.sidr-class-sbc-logout-button').css('display','inline-block');
                         staylogin(result.payment_login);
                     }
                 }
+                else
+                    $('li.sidr-class-sbc-logout-button').css('display','none');
             });
         }
         else{
             isLogin = true;
             $('#sbc-login-form').css('display','none');
             $('#travelDetailsForm').css('display','block');
-            $('li.sbc-logout-button').css('display','inline-block');
+            $('li.sbc-logout-button, li.sidr-class-sbc-logout-button').css('display','inline-block');
             getPoint();
         }
         $('#sbclogout, #sidr-id-sbclogout').on('click',function(){
-            if(confirm('Are you sure?')){
-                request(sbcvar.proxy_url+'api/logout?site_id='+sbcvar.site_id,function(result){
-                    if(result.status=="ok"){
-                        $('#sbc-login-form').css('display','block');
-                        $('#travelDetailsForm').css('display','none');
-                        $('li.sbc-logout-button').css('display','none');
-
-                        document.cookie = "payment_login=;path=/;expires= Thu, 21 Aug 2014 20:00:00 UTC";
-                    }
-                });
-            }
+            doLogout();
         })
     });
+
+    function doLogout(){
+        if(confirm('Are you sure?')){
+            request(sbcvar.proxy_url+'api/logout?site_id='+sbcvar.site_id,function(result){
+                if(result.status=="ok"){
+                    $('#sbc-login-form').css('display','block');
+                    $('#travelDetailsForm').css('display','none');
+                    $('li.sbc-logout-button').css('display','none');
+
+                    document.cookie = "payment_login=;path=/;expires= Thu, 21 Aug 2014 20:00:00 UTC";
+                }
+            });
+        }
+    }
 
     function getCook(cookiename) 
     {
@@ -345,7 +351,6 @@ jQuery(function($){
 
     function getPoint(){
         request(sbcvar.proxy_url+'api/point?site_id='+sbcvar.site_id,function(pointResult){
-            console.log('pointResult',pointResult);
             if(pointResult.status=="ok"){
                 $('b.sbc-point, b.sidr-class-sbc-point').html(pointResult.data);
             }
@@ -359,22 +364,36 @@ jQuery(function($){
         var cookieString = 'payment_login='+email+';path=/;' + dateString;
         document.cookie = cookieString;
     }
+});
 
-    function request(url, callback, body = '', method = 'GET'){
-        var xhr = new XMLHttpRequest();
-        xhr.onload = function() {
-            if (xhr.status == 200) {
-                if(typeof(callback)=='function'){
-                    result = JSON.parse(xhr.response);
-                    callback(result)
-                }
+function doLogout(){
+    if(confirm('Are you sure?')){
+        request(sbcvar.proxy_url+'api/logout?site_id='+sbcvar.site_id,function(result){
+            if(result.status=="ok"){
+                jQuery('#sbc-login-form').css('display','block');
+                jQuery('#travelDetailsForm').css('display','none');
+                jQuery('li.sbc-logout-button, li.sidr-class-sbc-logout-button').css('display','none');
+
+                document.cookie = "payment_login=;path=/;expires= Thu, 21 Aug 2014 20:00:00 UTC";
             }
-            else{
-                console.log('error',xhr.response);
+        });
+    }
+}
+
+function request(url, callback, body = '', method = 'GET'){
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            if(typeof(callback)=='function'){
+                result = JSON.parse(xhr.response);
+                callback(result)
             }
         }
-        xhr.open(method, url, true);
-        xhr.withCredentials = true;
-        xhr.send(body);
+        else{
+            console.log('error',xhr.response);
+        }
     }
-});
+    xhr.open(method, url, true);
+    xhr.withCredentials = true;
+    xhr.send(body);
+}
