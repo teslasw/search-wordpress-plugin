@@ -354,6 +354,13 @@ jQuery(function($){
             if(pointResult.status=="ok"){
                 $('b.sbc-point, b.sidr-class-sbc-point').html(pointResult.data);
             }
+            else{
+                $('#sbc-login-form').css('display','block');
+                $('#travelDetailsForm').css('display','none');
+                $('li.sbc-logout-button').css('display','none');
+
+                document.cookie = "payment_login=;path=/;expires= Thu, 21 Aug 2014 20:00:00 UTC";
+            }
         })
     }
 
