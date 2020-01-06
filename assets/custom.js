@@ -276,9 +276,8 @@ jQuery(function($){
                             searchId : bookvar.searchid,
                             locale : locale[0]+'-'+locale[1].toUpperCase(),
                             addInfo : encodeURI(window.btoa(JSON.stringify({
-                                locale : sbcvar.locale,
                                 session : result.session,
-                                email: getCook('payment_login')
+                                user_login: getCook('payment_login')
                             })))
                         };
                         if(bookvar.child.length>0)
