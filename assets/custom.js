@@ -3,6 +3,7 @@ jQuery(function($){
     let bookvar = {searchid:'',location:'',regionid:'',adult:'2',child:[],room:'1'};
     let childvar = [];
     let desplholder = '';
+    
     $(document).ready(function($){
         $('#destination').focusin(function(){
             desplholder = $(this).attr('placeholder');
@@ -15,7 +16,8 @@ jQuery(function($){
             minLength: 1,
             delay: 0,
             source: function( request, response ) {
-                let zumataUrl = 'https://wlapi.hotelbookingservices.co/web/autosuggest?locale='+sbcvar.locale;//'https://lv2.globaltripper.com/web/autosuggest';
+                let locale    = (/^[a-zA-Z]+$/.test(request.term)) ? 'en-us' : 'zh-cn';
+                let zumataUrl = 'https://wlapi.hotelbookingservices.co/web/autosuggest?locale='+locale;//'https://lv2.globaltripper.com/web/autosuggest';
                 let authToken = 'app_SBCTeb0e53e32d3f76deba91';//'app_TESTeec3307e143e768c1983';
                 $.ajax({
                     url: zumataUrl,
@@ -229,7 +231,7 @@ jQuery(function($){
                 bookvar.adult=$('.no-adults .total').text();
                 bookvar.child=childvar;
                 bookvar.room=$('.no-rooms .total').text();
-                $('#option-guest').val(bookvar.adult+' Adults · '+bookvar.child.length+' Children · '+bookvar.room+' Room'+(bookvar.room>1?'s':''));
+                $('#option-guest').val(bookvar.adult+' '+sbcvar.adults+' · '+bookvar.child.length+' '+sbcvar.children+' · '+bookvar.room+' '+sbcvar.room+''+(bookvar.room>1?'s':''));
                 $popup.popover('hide');
             });
         });
