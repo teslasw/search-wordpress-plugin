@@ -263,6 +263,7 @@ jQuery(function($){
             }
 
             if(!haserror){
+                let locale = sbcvar.locale.split('-');
                 let params = {
                     locationQuery : bookvar.location,
                     regionId : bookvar.regionid,
@@ -272,6 +273,10 @@ jQuery(function($){
                     adultCount : bookvar.adult,
                     currency : 'USD',
                     searchId : bookvar.searchid,
+                    locale : locale[0]+'-'+locale[1].toUpperCase(),
+                    addInfo : encodeURI(window.btoa(JSON.stringify({
+                        domain: sbcvar.site_url
+                    })))
                 };
                 if(bookvar.child.length>0)
                     params.children = bookvar.child.join(',');
