@@ -277,7 +277,8 @@ jQuery(function($){
                             locale : locale[0]+'-'+locale[1].toUpperCase(),
                             addInfo : encodeURI(window.btoa(JSON.stringify({
                                 session : result.session,
-                                user_login: getCook('payment_login')
+                                user_login: getCook('payment_login'),
+                                domain: sbcvar.site_url
                             })))
                         };
                         if(bookvar.child.length>0)
