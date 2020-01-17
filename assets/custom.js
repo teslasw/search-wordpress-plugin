@@ -273,11 +273,10 @@ jQuery(function($){
                     adultCount : bookvar.adult,
                     currency : 'USD',
                     searchId : bookvar.searchid,
-                    locale : locale[0]+'-'+locale[1].toUpperCase(),
-                    addInfo : encodeURI(window.btoa(JSON.stringify({
-                        domain: sbcvar.site_url
-                    })))
+                    locale : locale[0]+'-'+locale[1].toUpperCase()
                 };
+                if(sbcvar.addInfo!=undefined)
+                    params.addInfo = encodeURI(sbcvar.addInfo)
                 if(bookvar.child.length>0)
                     params.children = bookvar.child.join(',');
                 console.log("Params: %o", params);
