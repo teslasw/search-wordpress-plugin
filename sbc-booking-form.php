@@ -55,7 +55,7 @@ add_shortcode( 'sbcbookingform', 'sbcbookingform_code' );
 
 function sbcbookingform_scripts()
 {
-    global $sbcconfig;
+    global $sbcbookconfig;
     $build = '1.07b';
     wp_enqueue_style( 'multidatespicker', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.multidatespicker.css' );
     wp_enqueue_style( 'jquery-ui', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.min.css' );
@@ -116,8 +116,8 @@ function sbcbookingform_scripts()
         'search' => __('Search','sbcbooking'),
         'addInfo' => get_site_url(),
     );
-    if(isset($sbcconfig['addInfo']))
-        $jsVar['addInfo'] = $sbcconfig['addInfo'];
+    if(isset($sbcbookconfig['addInfo']))
+        $jsVar['addInfo'] = $sbcbookconfig['addInfo'];
     wp_localize_script( 'sbcbooking', 'sbcvar', $jsVar);
     wp_enqueue_script( 'sbcbooking' );
     
