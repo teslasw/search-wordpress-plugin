@@ -262,7 +262,7 @@ jQuery(function($){
             }
 
             if(!haserror){
-                request(sbcvar.proxy_url+'api/session?site_id='+sbcvar.site_id,function(result){
+                request(sbcvar.site_url+'wp-json/sbc-api/v1/session',function(result){
                     if(result.status=="ok"&&result.session!=undefined){
                         let locale = sbcvar.locale.split('-');
                         let params = {
@@ -301,7 +301,7 @@ jQuery(function($){
             console.log('change',obj);
         }
         if(sbcvar.is_login==false){
-            request(sbcvar.proxy_url+'api/email?site_id='+sbcvar.site_id,function(result){
+            request(sbcvar.site_url+'wp-json/sbc-api/v1/check',function(result){
                 if(result.status=="ok"){
                     isLogin = true;
                     $('#sbc-login-form').css('display','none');
@@ -330,7 +330,7 @@ jQuery(function($){
 
     function doLogout(){
         if(confirm('Are you sure?')){
-            request(sbcvar.proxy_url+'api/logout?site_id='+sbcvar.site_id,function(result){
+            request(sbcvar.site_url+'wp-json/sbc-api/v1/logout',function(result){
                 if(result.status=="ok"){
                     $('#sbc-login-form').css('display','block');
                     $('#travelDetailsForm').css('display','none');
@@ -349,7 +349,7 @@ jQuery(function($){
     }
 
     function getPoint(){
-        request(sbcvar.proxy_url+'api/point?site_id='+sbcvar.site_id,function(pointResult){
+        request(sbcvar.site_url+'wp-json/sbc-api/v1/point',function(pointResult){
             if(pointResult.status=="ok"){
                 $('b.sbc-point, b.sidr-class-sbc-point').html(pointResult.data);
             }

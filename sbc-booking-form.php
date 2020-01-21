@@ -12,10 +12,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if (!session_id()) {
+    session_start();
+}
+
 if(file_exists(__DIR__.'/sbc-config.php'))
     include __DIR__.'/sbc-config.php';
 
 function sbcbookingform_code(){
+    if(isset($_GET['payment_login'])){
+        $_SESSION['payment_login'] = $_GET['payment_login'];
+        $info = pathinfo($_SERVER['REQUEST_URI']);
+        header("Location: ".get_bloginfo('wpurl').$info['dirname']);
+        die();
+    }
     global $sbcconfig;
     $cconnect_api_key = $sbcconfig['cconnect_api_key'];
     $login_cconnect = $sbcconfig['login_cconnect'];
@@ -69,7 +79,7 @@ add_shortcode( 'sbcbookingform', 'sbcbookingform_code' );
 function sbcbookingform_scripts()
 {
     global $sbcconfig;
-    $build = '1.11i';
+    $build = '1.12';
     wp_enqueue_style( 'multidatespicker', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.multidatespicker.css' );
     wp_enqueue_style( 'jquery-ui', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.min.css' );
     // wp_enqueue_style( 'bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' );
@@ -135,6 +145,7 @@ function sbcbookingform_scripts()
         'zumata_redirect_url' => $sbcconfig['zumata_redirect_url'],
         'zumata_api_url' => $sbcconfig['zumata_api_url'],
         'zumata_api_token' => $sbcconfig['zumata_api_token'],
+        'site_url' => esc_url(home_url())
     ));
     wp_enqueue_script( 'sbcbooking' );
     
@@ -151,3 +162,164 @@ function sbc_loginout_menu( $items, $args ) {
     return $items;
 }
 add_filter('wp_nav_menu_items','sbc_loginout_menu', 10, 2);
+
+add_action( 'rest_api_init', function () {
+    register_rest_route( 'sbc-api/v1', '/check', array(
+        'methods' => 'GET',
+        'callback' => 'sbc_api_check',
+    ));
+    register_rest_route( 'sbc-api/v1', '/session', array(
+        'methods' => 'GET',
+        'callback' => 'sbc_api_session',
+    ));
+    register_rest_route( 'sbc-api/v1', '/point', array(
+        'methods' => 'GET',
+        'callback' => 'sbc_api_point',
+    ));
+    register_rest_route( 'sbc-api/v1', '/logout', array(
+        'methods' => 'GET',
+        'callback' => 'sbc_api_logout',
+    ));
+});
+
+function sbc_api_check(){
+    global $sbcconfig;
+    $response = array('status'=>'nok','message'=>array(),'cookie'=>false,'session'=>false);
+    if(isset($_COOKIE['payment_login'])){
+        $customer = $_COOKIE['payment_login'];
+        $response['cookie'] = true;
+    }
+    if(isset($_SESSION['payment_login'])){
+        if(!isset($customer))
+            $customer = $_SESSION['payment_login'];
+        $response['session'] = true;
+    }
+    if(!empty($customer)){
+        $r = json_decode(sbc_curl($sbcconfig['proxy_url'].'api/session/check?site_id='.$sbcconfig['site_id'].'&customer='.$customer),true);
+        if(is_array($r))
+            if($r['status']=='ok'){
+                $response['status'] = 'ok';
+                $response['payment_login'] = $customer;
+            }
+            else
+                $response['message'] = $r['message'];
+        else
+            $response['message'][] = 'result not valid';
+
+    }
+    else{
+        $response['message'][] = 'customer not found';
+    }
+    return $response;
+}
+
+function sbc_api_session(){
+    global $sbcconfig;
+    $response = array('status'=>'nok','message'=>array());
+    if(isset($_COOKIE['payment_login'])){
+        $customer = $_COOKIE['payment_login'];
+    }
+    if(isset($_SESSION['payment_login'])){
+        $customer = $_SESSION['payment_login'];
+    }
+    if(!empty($customer)){
+        $r = json_decode(sbc_curl($sbcconfig['proxy_url'].'api/session?site_id='.$sbcconfig['site_id'].'&customer='.$customer),true);
+        if(is_array($r))
+            if($r['status']=='ok'){
+                $response['status'] = 'ok';
+                $response['session'] = $r['session'];
+            }
+            else
+                $response['message'] = $r['message'];
+        else
+            $response['message'][] = 'result not valid';
+
+    }
+    else{
+        $response['message'][] = 'customer not found';
+    }
+    return $response;
+}
+
+function sbc_api_point(){
+    global $sbcconfig;
+    $response = array('status'=>'nok','message'=>array());
+    if(isset($_COOKIE['payment_login'])){
+        $customer = $_COOKIE['payment_login'];
+    }
+    if(isset($_SESSION['payment_login'])){
+        $customer = $_SESSION['payment_login'];
+    }
+    if(!empty($customer)){
+        $r = json_decode(sbc_curl($sbcconfig['proxy_url'].'api/point?site_id='.$sbcconfig['site_id'].'&customer='.$customer),true);
+        if(is_array($r))
+            if($r['status']=='ok'){
+                $response['status'] = 'ok';
+                $response['data'] = $r['data'];
+            }
+            else
+                $response['message'] = $r['message'];
+        else
+            $response['message'][] = 'result not valid';
+
+    }
+    else{
+        $response['message'][] = 'customer not found';
+    }
+    return $response;
+}
+
+function sbc_api_logout(){
+    global $sbcconfig;
+    $response = array('status'=>'nok','message'=>array());
+    if(isset($_COOKIE['payment_login'])){
+        $customer = $_COOKIE['payment_login'];
+    }
+    if(isset($_SESSION['payment_login'])){
+        $customer = $_SESSION['payment_login'];
+    }
+    if(!empty($customer)){
+        $r = json_decode(sbc_curl($sbcconfig['proxy_url'].'api/logout?site_id='.$sbcconfig['site_id'].'&customer='.$customer),true);
+        if(is_array($r))
+            if($r['status']=='ok'){
+                $response['status'] = 'ok';
+                unset($_SESSION['payment_login']);
+                unset($_COOKIE['payment_login']);
+            }
+            else
+                $response['message'] = $r['message'];
+        else
+            $response['message'][] = 'result not valid';
+
+    }
+    else{
+        $response['message'][] = 'customer not found';
+    }
+    return $response;
+}
+
+function sbc_curl($url){
+    $path = parse_url($url);
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_FAILONERROR, true);
+    curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+        'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Encoding: gzip, deflate',
+        'Accept-Language: en-US,en;q=0.5',
+        'Cache-Control: no-cache',
+        'Connection: keep-alive',
+        'Upgrade-Insecure-Requests: 1',
+        'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
+        'Host: '.$path['host'],
+        'Origin: '.home_url(),
+        'Referer: '.home_url(),
+        'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:28.0) Gecko/20100101 Firefox/28.0',
+        'Cookie: '
+    ));
+    $result = curl_exec($curl);
+    return $result; 
+}
