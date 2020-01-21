@@ -142,6 +142,7 @@ function sbcbookingform_scripts()
         'login' => __('Login','sbcbooking'),
         'proxy_url' => $sbcconfig['proxy_url'],
         'site_id' => $sbcconfig['site_id'],
+        'site_url' => get_site_url(),
         'zumata_redirect_url' => $sbcconfig['zumata_redirect_url'],
         'zumata_api_url' => $sbcconfig['zumata_api_url'],
         'zumata_api_token' => $sbcconfig['zumata_api_token'],
