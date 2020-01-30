@@ -12,9 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if(file_exists(__DIR__.'/sbc-config.php'))
-    include __DIR__.'/sbc-config.php';
-
 function sbcbookingform_code(){
     return '<form id="travelDetailsForm" method="get">
         <div class="bootstrap row">
@@ -55,8 +52,10 @@ add_shortcode( 'sbcbookingform', 'sbcbookingform_code' );
 
 function sbcbookingform_scripts()
 {
-    global $sbcbookconfig;
-    $build = '1.07b';
+
+    if(file_exists(__DIR__.'/sbc-config.php'))
+        $sbcconfig = include __DIR__.'/sbc-config.php';
+    $build = '1.07c';
     wp_enqueue_style( 'multidatespicker', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.multidatespicker.css' );
     wp_enqueue_style( 'jquery-ui', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.min.css' );
     // wp_enqueue_style( 'bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' );
@@ -114,10 +113,10 @@ function sbcbookingform_scripts()
         'error_checkin' => __( 'Check In date is required', 'sbcbooking' ),
         'error_checkout' => __( 'Check Out date is required', 'sbcbooking' ),
         'search' => __('Search','sbcbooking'),
-        'addInfo' => get_site_url(),
+        'merchantid'=>$sbcconfig['merchantid'],
+        'hash'=>$sbcconfig['hash'],
+        'domain'=>$sbcconfig['domain'],
     );
-    if(isset($sbcbookconfig['addInfo']))
-        $jsVar['addInfo'] = $sbcbookconfig['addInfo'];
     wp_localize_script( 'sbcbooking', 'sbcvar', $jsVar);
     wp_enqueue_script( 'sbcbooking' );
     
