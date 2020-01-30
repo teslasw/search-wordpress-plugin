@@ -146,7 +146,10 @@ function sbcbookingform_scripts()
         'zumata_redirect_url' => $sbcconfig['zumata_redirect_url'],
         'zumata_api_url' => $sbcconfig['zumata_api_url'],
         'zumata_api_token' => $sbcconfig['zumata_api_token'],
-        'site_url' => esc_url(home_url())
+        'site_url' => esc_url(home_url()),
+        'merchantid' => $sbcconfig['merchantid'],
+        'hash' => $sbcconfig['hash'],
+        'domain' => $sbcconfig['domain'],
     ));
     wp_enqueue_script( 'sbcbooking' );
     

@@ -278,7 +278,9 @@ jQuery(function($){
                             addInfo : encodeURI(window.btoa(JSON.stringify({
                                 session : result.session,
                                 user_login: getCook('payment_login'),
-                                domain: sbcvar.site_url
+                                merchantid: sbcvar.merchantid,
+                                hash: sbcvar.hash,
+                                domain: sbcvar.domain
                             })))
                         };
                         if(bookvar.child.length>0)
