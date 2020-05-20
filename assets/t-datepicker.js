@@ -86,9 +86,9 @@
       var d = new Date();
       var m = d.getMonth(); // 0 - 11
       var y = d.getFullYear();
-      var toDay = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()); // UTC
+      var toDay = Date(d.getFullYear(), d.getMonth(), d.getDate()); // UTC
       function getToday() {
-        return Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+        return Date(d.getFullYear(), d.getMonth(), d.getDate());
       }
       // console.log(pr_el) // options first call
       // Check update options and Methods, Object or string
@@ -107,7 +107,7 @@
       }
       update_options.startDate = convertDateUTC(convertFormatDf(update_options.startDate))
       var sd = new Date(update_options.startDate);
-      var nextDay = Date.UTC(sd.getFullYear(), sd.getMonth(), sd.getDate()+1); // UTC
+      var nextDay = Date(sd.getFullYear(), sd.getMonth(), sd.getDate()+1); // UTC
       if ( pr_el === 'setStartDate' && typeof(pr_el) === 'string' ) {
         update_options.startDate = convertDateUTC(convertFormatDf(options))
       }
@@ -524,7 +524,7 @@
       // fn convert date_utc 2018/02/27 -> 1519689600000 // YY/MM/DD
       function convertDateUTC(pr_date_utc) {
         var date = new Date(pr_date_utc);
-        var date_utc = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+        var date_utc = Date(date.getFullYear(), date.getMonth(), date.getDate());
         if ( date_utc === 0 ) { date_utc = null };
         return date_utc;
       }
@@ -632,7 +632,7 @@
           pr_in = settings.startDate;
           // next Day form dataCheckIn
           var date = new Date(pr_in);
-          pr_out = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+          pr_out = Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
           // console.log('a')
         }
         if ( pr_in !== null && pr_out !== null ) {
@@ -679,7 +679,7 @@
           for ( var i_num = 0; i_num <= numCalendar; i_num++) {
             // Call title month
             var date = new Date(pr_data_utc)
-            var newDate = new Date(Date.UTC(date.getFullYear(), (date.getMonth() + i_num)));
+            var newDate = new Date(date.getFullYear(), (date.getMonth() + i_num));
             // tswitch[i_num].innerHTML = 'Tháng ' + (newDate.getMonth() + 1) + ' ' + newDate.getFullYear();
             tswitch[i_num].innerHTML = settings.titleMonths[newDate.getMonth()] + ' ' + newDate.getFullYear();
   
@@ -689,12 +689,12 @@
             var days = [];
   
             // Call data Next month follow number calendar
-            var nextDate = Date.UTC(date.getFullYear(), (date.getMonth() + i_num));
+            var nextDate = Date(date.getFullYear(), (date.getMonth() + i_num));
             var date = new Date(nextDate)
-            while ( Date.UTC(date.getFullYear(), (date.getMonth()) ) === nextDate ) {
+            while ( Date(date.getFullYear(), (date.getMonth()) ) === nextDate ) {
               days.push(date.getDay());      // Day of week 0 - 6 tìm được vị trí ngày đầu tiên và cuối cùng trong tháng
               dataDays.push(date.getDate()); // Day of month 1 -31 tìm được số ngày của 1 tháng
-              dataUTCDate.push(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())) // Number day ex: 1519257600000
+              dataUTCDate.push(Date(date.getFullYear(), date.getMonth(), date.getDate())) // Number day ex: 1519257600000
               date.setDate(date.getDate() + 1); // So sánh số ngày của tháng
             }
             // console.log(days)
@@ -764,8 +764,8 @@
   
         var d_utc = new Date(dataUTC[0]);
         var d_utc_co = new Date(dataUTC[1]);
-        var limitRange = Date.UTC(d_utc.getFullYear(), d_utc.getMonth(), d_utc.getDate() + settings.limitDateRanges );
-        var limitRangeCO = Date.UTC(d_utc_co.getFullYear(), d_utc_co.getMonth(), d_utc_co.getDate() - settings.limitDateRanges );
+        var limitRange = Date(d_utc.getFullYear(), d_utc.getMonth(), d_utc.getDate() + settings.limitDateRanges );
+        var limitRangeCO = Date(d_utc_co.getFullYear(), d_utc_co.getMonth(), d_utc_co.getDate() - settings.limitDateRanges );
   
         for ( var i = 0; i < toDayElement.length; i++ ) {
           var dayselect = toDayElement[i].getAttribute('data-t-date');
@@ -801,7 +801,7 @@
             // disable button Arrow Next when in check-out
             var CI_Arrow = settings.dateCheckIn || toDay; // Case CI = null
             var ci_d = new Date(CI_Arrow);
-            var co_n = Date.UTC(ci_d.getFullYear(), ci_d.getMonth(), ci_d.getDate() + settings.limitDateRanges)
+            var co_n = Date(ci_d.getFullYear(), ci_d.getMonth(), ci_d.getDate() + settings.limitDateRanges)
             if ( $(pr_el).find('[data-t-date="'+ co_n +'"]')[0] !== undefined ) {
               var Arrow = pr_el.parent().find('.t-arrow');
               Arrow[Arrow.length-1].className = Arrow[Arrow.length-1].className.replace(' t-disabled', '') + ' t-disabled'
@@ -884,7 +884,7 @@
   
               var d = new Date(dataUTC[1]);
               // Giới hạn 30 ngày
-              var limitdate = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate() - settings.limitDateRanges);
+              var limitdate = Date(d.getFullYear(), d.getMonth(), d.getDate() - settings.limitDateRanges);
               data_utc_in = get_utc;
               data_utc_out = dataUTC[1];
   
@@ -976,8 +976,8 @@
                     }
                   }
   
-                  var nd_1 = Date.UTC( nd.getFullYear(), nd.getMonth(), nd.getDate());
-                  var limitday = Date.UTC( nd.getFullYear(), nd.getMonth(), nd.getDate() - settings.limitDateRanges);
+                  var nd_1 = Date( nd.getFullYear(), nd.getMonth(), nd.getDate());
+                  var limitday = Date( nd.getFullYear(), nd.getMonth(), nd.getDate() - settings.limitDateRanges);
                   // Ở t-check-in nhỏ hơn hoặc = 30 tính từ ngày t-check-out nếu đã có t-check-out
                   // Hover vào today và end limitDateRanges
                   if ( el_hover <= limitday ) {
@@ -985,7 +985,7 @@
                   }
   
                   while ( el_hover < nd_1 ) {
-                    nd_1 = Date.UTC( nd.getFullYear(), nd.getMonth(), nd.getDate() - numDay);
+                    nd_1 = Date( nd.getFullYear(), nd.getMonth(), nd.getDate() - numDay);
                     var t_this = $(pr_el).parents('.t-check-in').find('[data-t-date="' + nd_1 + '"]')[0];
                     if ( t_this != undefined ) {
                       t_this.className = t_this.className.replace(' t-range-limit', '') + ' t-range-limit';
@@ -999,14 +999,14 @@
   
                 if ( $(pr_el).parents('.t-check-out').hasClass('t-check-out') === true ) {
                   var nd = new Date(pr_date_utc[0]);
-                  var nd_1 = Date.UTC( nd.getFullYear(), nd.getMonth(), nd.getDate());
-                  var limitday = Date.UTC( nd.getFullYear(), nd.getMonth(), nd.getDate() + settings.limitDateRanges);
+                  var nd_1 = Date( nd.getFullYear(), nd.getMonth(), nd.getDate());
+                  var limitday = Date( nd.getFullYear(), nd.getMonth(), nd.getDate() + settings.limitDateRanges);
                   if ( el_hover >= limitday ) {
                     return;
                   }
                   // Ở t-check-out lớn hơn hoặc = 31 ngày tiếp theo stop
                   while ( el_hover != nd_1  ) {
-                    nd_1 = Date.UTC( nd.getFullYear(), nd.getMonth(), nd.getDate() + numDay);
+                    nd_1 = Date( nd.getFullYear(), nd.getMonth(), nd.getDate() + numDay);
                     var t_this = $(pr_el).parents('.t-check-out').find('[data-t-date="' + nd_1 + '"]')[0];
                     if ( t_this != undefined ) {
                       t_this.className = t_this.className.replace(' t-range-limit', '') + ' t-range-limit';
@@ -1182,8 +1182,8 @@
         // console.log(settings.startDate)
         var df_toDay = new Date(settings.startDate);               // nếu = null thì lấy toDay làm chuẩntuds_change
         var end_Date = new Date(convertFormatDf(settings.endDate)) // nếu = null thì lấy setStart làm chuẩn
-        var limitPrevMonth = Date.UTC(df_toDay.getFullYear(), df_toDay.getMonth() - settings.limitPrevMonth );
-        var limitNextMonth = Date.UTC(end_Date.getFullYear(), end_Date.getMonth()) || Date.UTC(df_toDay.getFullYear(), df_toDay.getMonth() + numCalendar + settings.limitNextMonth);
+        var limitPrevMonth = Date(df_toDay.getFullYear(), df_toDay.getMonth() - settings.limitPrevMonth );
+        var limitNextMonth = Date(end_Date.getFullYear(), end_Date.getMonth()) || Date(df_toDay.getFullYear(), df_toDay.getMonth() + numCalendar + settings.limitNextMonth);
   
         var newDate = new Date(pr_data_utc)
         var y = newDate.getFullYear();
@@ -1198,26 +1198,26 @@
           }
           tArrow[0].onclick = function(e) {
             e.stopPropagation()
-            if ( Date.UTC(y, m) > limitPrevMonth ) {
+            if ( Date(y, m) > limitPrevMonth ) {
               m = m - 1;
               // Nhận vào Elements [dates], date_utc = [1,2]
-              setDaysInMonth( pr_el, Date.UTC(y, m) )
+              setDaysInMonth( pr_el, Date(y, m) )
             }
           }
           // Next Calendar
           tArrow[tArrow.length - 1].onclick = function(e) {
             e.stopPropagation()
-            if ( Date.UTC(y, m+numCalendar) < limitNextMonth ) {
+            if ( Date(y, m+numCalendar) < limitNextMonth ) {
               m = m + 1;
               // Nhận vào Elements [dates], date_utc = [1,2]
-              setDaysInMonth( pr_el, Date.UTC(y, m) )
+              setDaysInMonth( pr_el, Date(y, m) )
             }
           }
         }
   
         var Arrow_2 = pr_el.find('.t-arrow');
         // disable button Arrow when t-check-in limit month
-        if ( Date.UTC(y, m+numCalendar) != limitNextMonth && Date.UTC(y, m) === limitPrevMonth ) {
+        if ( Date(y, m+numCalendar) != limitNextMonth && Date(y, m) === limitPrevMonth ) {
           Arrow_2[Arrow_2.length-1].className = 't-arrow t-next'
           Arrow_2[0].className = 't-arrow t-prev t-disabled'
         } else {
@@ -1225,17 +1225,17 @@
         }
   
   
-        if ( Date.UTC(y, m+numCalendar) === limitNextMonth
-        || new Date(Date.UTC(y, m+numCalendar)).getMonth() === new Date(dataUTC[0]).getMonth()+1 ) {
+        if ( Date(y, m+numCalendar) === limitNextMonth
+        || new Date(y, m+numCalendar).getMonth() === new Date(dataUTC[0]).getMonth()+1 ) {
           Arrow_2[Arrow_2.length-1].className = 't-arrow t-next t-disabled'
         }
-        if ( Date.UTC(y, m+numCalendar) < limitNextMonth ) {
+        if ( Date(y, m+numCalendar) < limitNextMonth ) {
           // console.log('c')
           Arrow_2[Arrow_2.length-1].className = 't-arrow t-next'
         }
   
-        // return Date.UTC(df_toDay.getFullYear(), df_toDay.getMonth() + numCalendar + settings.limitNextMonth, df_toDay.getDate());
-        return Date.UTC(df_toDay.getFullYear(), df_toDay.getMonth() + numCalendar + settings.limitNextMonth, df_toDay.getDate());
+        // return Date(df_toDay.getFullYear(), df_toDay.getMonth() + numCalendar + settings.limitNextMonth, df_toDay.getDate());
+        return Date(df_toDay.getFullYear(), df_toDay.getMonth() + numCalendar + settings.limitNextMonth, df_toDay.getDate());
       }
       // newDataUTC = getDateUTC(options.dateCheckIn, 1522454400000);
       // Function show || Hide calendar [Date]
