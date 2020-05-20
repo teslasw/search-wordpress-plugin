@@ -565,7 +565,7 @@
           }
           // Gọi sai format là return;
           if ( isNaN(new Date(yyyy_mm_dd)) ) {
-            console.log("'Thank you for using t-datepicker. Please, check formatDate :'%c " + settings.formatDate + ' ', 'background: #f16d99; color: #fff');
+            console.log(settings,"'Thank you for using t-datepicker. Please, check formatDate :'%c " + settings.formatDate + ' ', 'background: #f16d99; color: #fff');
             return;
           }
           return yyyy_mm_dd; // Convert String '25/06/2018' - '2018/06/25'
