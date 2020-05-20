@@ -55,7 +55,7 @@ function sbcbookingform_scripts()
 
     if(file_exists(__DIR__.'/sbc-config.php'))
         $sbcconfig = include __DIR__.'/sbc-config.php';
-    $build = '1.07d';
+    $build = '1.07e';
     wp_enqueue_style( 'multidatespicker', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.multidatespicker.css' );
     wp_enqueue_style( 'jquery-ui', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.min.css' );
     // wp_enqueue_style( 'bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' );
