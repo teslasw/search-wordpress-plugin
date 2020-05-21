@@ -6,6 +6,46 @@
 	-ms-user-select: none;
 	user-select: none;
 }
+#datepicker { margin-top: 10px}
+.daterangepicker table th td:first-child, 
+.daterangepicker table tr td:last-child,
+.daterangepicker table tr td:first-child, 
+.daterangepicker table tr td:last-child
+{
+   border-left: 10px !important;
+   border-right: 10px !important;
+}
+.daterangepicker td {
+	background: #fafafa;
+	border: 2px solid #fff !important;
+}
+.daterangepicker td.weekend{
+   color: #fe6060;
+}
+.daterangepicker td.active,
+.daterangepicker td.active:hover, 
+.daterangepicker td.in-range.active{
+   color: #fff;
+   background: #fd1414;
+}
+.daterangepicker td.today {
+	color: #fff;
+	background: #aeaeae;
+}
+.daterangepicker td.disabled, .daterangepicker td.off, .daterangepicker td.off.active {
+   cursor: auto;
+   text-decoration: none;
+   opacity: 0.25;
+   color: inherit;
+   background: none;
+}
+.daterangepicker td.in-range {
+   color: #fe6060;
+   background: #ffe7e7;
+}
+.t-check-in, .t-check-out {
+	color: #555;
+}
 
 @media (min-width: 768px) {
 	.bd-placeholder-img-lg {

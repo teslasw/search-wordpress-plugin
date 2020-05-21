@@ -21,13 +21,19 @@ function sbcbookingform_code(){
                 </div>
                 <div class="destination-error has-error" style="display:none"></div>
             </div>
-            <div class="form-group bootstrap col-xl-4 col-lg-12">
-                <div class="input-group bootstrap">
-                    <div id="dates" class="t-datepicker">
-                        <div class="t-check-in"></div>
-                        <div class="t-check-out"></div>
-                    </div>
-                </div>
+            <div class="form-group bootstrap col-xl-4 col-lg-12" id="datepicker">
+                <div class="input-group bootstrap row">'.
+                    // <div id="dates" class="t-datepicker">
+                        '<div class="t-check-in bootstrap col-lg-6 text-center">
+                            <i class="fa fa-calendar" aria-hidden="true"></i> '.__('Check In', 'sbcbooking').'
+                        </div>
+                        <div class="t-check-out bootstrap col-lg-6 text-center">
+                            <i class="fa fa-calendar" aria-hidden="true"></i> '.__('Check Out', 'sbcbooking').'
+                        </div>'.
+                    // </div>
+                '</div>
+                <input type="hidden" name="t-start"/>
+                <input type="hidden" name="t-end"/>
                 <div class="datepicker-error has-error" style="display:none"></div>
             </div>
             <div class="form-group bootstrap last col-xl-3 col-lg-12">
@@ -60,18 +66,21 @@ function sbcbookingform_scripts()
     wp_enqueue_style( 'jquery-ui', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.min.css' );
     // wp_enqueue_style( 'bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' );
     wp_enqueue_style( 'bootstrap-custom', plugins_url( '/', __FILE__ ) . 'assets/bootstrap.custom.css?b='.$build );
-    wp_enqueue_style( 't-datepicker', plugins_url( '/', __FILE__ ) . 'assets/t-datepicker.min.css' );
+    // wp_enqueue_style( 't-datepicker', plugins_url( '/', __FILE__ ) . 'assets/t-datepicker.min.css' );
+    wp_enqueue_style( 'daterangepicker', plugins_url( '/', __FILE__ ) . 'assets/daterangepicker.css' );
     // wp_enqueue_style( 't-datepicker-lime', plugins_url( '/', __FILE__ ) . 'assets/t-datepicker-lime.css' );
-    wp_enqueue_style( 't-datepicker-red', plugins_url( '/', __FILE__ ) . 'assets/t-datepicker-red.css' );
+    // wp_enqueue_style( 't-datepicker-red', plugins_url( '/', __FILE__ ) . 'assets/t-datepicker-red.css' );
     wp_enqueue_style( 'sbcbooking', plugins_url( '/', __FILE__ ) . 'assets/custom.css?b='.$build );
     if(file_exists(plugin_dir_path( __FILE__ ) . 'assets/custom-overide.css')){
         wp_enqueue_style( 'sbcbooking-overide', plugins_url( '/', __FILE__ ) . 'assets/custom-overide.css?b='.$build );
     }
 
     wp_enqueue_script( 'jquery-ui', plugins_url( '/', __FILE__ ) . 'assets/jquery-ui.min.js', array('jquery'));
+    wp_enqueue_script( 'moment', plugins_url( '/', __FILE__ ) . 'assets/moment.min.js', array('jquery'));
     wp_enqueue_script( 'popper', 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', array('jquery'));
     wp_enqueue_script( 'bootstrap-js', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', array('jquery'));
-    wp_enqueue_script( 't-datepicker', plugins_url( '/', __FILE__ ) . 'assets/t-datepicker.js', array('jquery'));
+    // wp_enqueue_script( 't-datepicker', plugins_url( '/', __FILE__ ) . 'assets/t-datepicker.js', array('jquery'));
+    wp_enqueue_script( 'daterangepicker', plugins_url( '/', __FILE__ ) . 'assets/daterangepicker.js', array('jquery','moment'));
     wp_register_script( 'sbcbooking', plugins_url( '/', __FILE__ ) . 'assets/custom.js?b='.$build, array('jquery'));
     $locale = apply_filters( 'wpml_current_language', NULL );
     if($locale=="zh-hans")

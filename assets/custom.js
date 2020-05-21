@@ -53,41 +53,56 @@ jQuery(function($){
               .append( '<div><i class="fa fa-map-marker" aria-hidden="true"></i> ' + item.term + '</div>' )
               .appendTo( ul );
         };
-        $('.t-datepicker').tDatePicker({
-	        iconDate: '<i class="fa fa-calendar" aria-hidden="true"></i>',
-            titleCheckIn: sbcvar.checkin,
-            titleCheckOut: sbcvar.checkout,
-            titleToday: sbcvar.today,
-            titleDateRange: sbcvar.night,
-            titleDateRanges: sbcvar.nights,
-            titleDays:[
-                sbcvar.mo,
-                sbcvar.tu,
-                sbcvar.we,
-                sbcvar.th,
-                sbcvar.fr,
-                sbcvar.sa,
-                sbcvar.su
-            ],
-            titleMonths:[
-                sbcvar.january,
-                sbcvar.february,
-                sbcvar.march,
-                sbcvar.april,
-                sbcvar.may,
-                sbcvar.june,
-                sbcvar.july,
-                sbcvar.august,
-                sbcvar.septemper,
-                sbcvar.october,
-                sbcvar.november,
-                sbcvar.december
-            ],
-            formatDate: 'yyyy-mm-dd'
+        var curDate = new Date();
+        $('#datepicker').daterangepicker({
+            autoApply: true,
+            showCustomRangeLabel: false,
+            minDate: `${curDate.getFullYear()}-${(curDate.getMonth()+1).toString().padStart(2,0)}-${curDate.getDate()}`
+        }, function(start, end, label) {
+            $('.t-check-in').html('<i class="fa fa-calendar" aria-hidden="true"></i> ' + start.format('DD MMMM YYYY'));
+            $('input[name="t-start"]').val(start.format('YYYY-MM-DD'))
+            $('.t-check-out').html('<i class="fa fa-calendar" aria-hidden="true"></i> ' + end.format('DD MMMM YYYY'));
+            $('input[name="t-end"]').val(end.format('YYYY-MM-DD'))
+        //   console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
         }).bind('click',function(){
             $('.datepicker-error').html('');
             $('.datepicker-error').hide();
         });
+        // $('.t-datepicker').tDatePicker({
+	    //     iconDate: '<i class="fa fa-calendar" aria-hidden="true"></i>',
+        //     titleCheckIn: sbcvar.checkin,
+        //     titleCheckOut: sbcvar.checkout,
+        //     titleToday: sbcvar.today,
+        //     titleDateRange: sbcvar.night,
+        //     titleDateRanges: sbcvar.nights,
+        //     titleDays:[
+        //         sbcvar.mo,
+        //         sbcvar.tu,
+        //         sbcvar.we,
+        //         sbcvar.th,
+        //         sbcvar.fr,
+        //         sbcvar.sa,
+        //         sbcvar.su
+        //     ],
+        //     titleMonths:[
+        //         sbcvar.january,
+        //         sbcvar.february,
+        //         sbcvar.march,
+        //         sbcvar.april,
+        //         sbcvar.may,
+        //         sbcvar.june,
+        //         sbcvar.july,
+        //         sbcvar.august,
+        //         sbcvar.septemper,
+        //         sbcvar.october,
+        //         sbcvar.november,
+        //         sbcvar.december
+        //     ],
+        //     formatDate: 'yyyy-mm-dd'
+        // }).bind('click',function(){
+        //     $('.datepicker-error').html('');
+        //     $('.datepicker-error').hide();
+        // });
         $('#option-guest').popover({
             html : true,
             placement: 'bottom',
